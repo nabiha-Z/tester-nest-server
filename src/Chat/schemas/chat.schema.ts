@@ -14,7 +14,7 @@ import { MessageSchema } from './message.schema';
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { User } from '../../User/schemas/user.schema'
+import { User } from 'src/users/schemas/user.schema';
 import { Message } from './message.schema';
 
 export type ChatDocument = Chat & Document;
