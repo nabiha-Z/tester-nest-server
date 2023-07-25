@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { User } from './schemas/user.schema';
+import { OAuthUserDto } from './dto/OAuth.dto';
 
 @Injectable()
 export class UsersService {
@@ -44,6 +45,22 @@ export class UsersService {
     if(!compare){
       throw new ForbiddenException('Invalid password');
     }
+    const payload = { username: user.name, id: user._id };
+    return {
+      access_token: await this.jwtService.signAsync(payload), payload
+    };
+  }
+
+  async oauth(OAuthUserDto: OAuthUserDto) {
+    
+    let {email} = OAuthUserDto;
+    const user = await this.userModel.findOne({email})
+
+    if(!user){
+      const newOAuthUser = new this.userModel(OAuthUserDto);
+      newOAuthUser.save();
+    }
+
     const payload = { username: user.name, id: user._id };
     return {
       access_token: await this.jwtService.signAsync(payload), payload

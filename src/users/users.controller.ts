@@ -29,6 +29,19 @@ export class UsersController {
     return user
   }
 
+  @Post('o-auth')
+  async OAuth(@Req() req: Request) {
+    const user =req.body.user
+    user.password = ""
+    return await this.userService.oauth(user)
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('authorize')
+  async validate(@Req() request: Request){
+   return request['access']
+  }
+
   @UseGuards(AuthGuard)
   @Get('logout')
   logout(@Req() request: Request): boolean {
